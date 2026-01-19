@@ -16,7 +16,7 @@ env:
 
 jobs:
   sync:
-    if: github.repository_owner == 'git-for-windows' || github.event.inputs.debug_with_ssh_key != ''
+    if: github.repository_owner == 'git-for-windows' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     environment: sync
     steps:
