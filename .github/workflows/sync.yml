@@ -1,6 +1,9 @@
 name: sync
 
 on:
+  push:
+    branches:
+      - accommodate-for-split-mingw-w64-git-package
   schedule:
     - cron: "59 2 * * *"
   workflow_dispatch:
@@ -16,15 +19,11 @@ env:
 
 jobs:
   sync:
-    if: github.repository_owner == 'git-for-windows' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     environment: sync
     steps:
       - name: clone git-sdk-32
         uses: actions/checkout@v6
-        with:
-          persist-credentials: true
-          token: ${{ secrets.PUSH_TOKEN }}
       - name: Update all Pacman packages
         shell: pwsh
         run: |
@@ -38,7 +37,7 @@ jobs:
         run: |
           set -x &&
           sh -x .github/commit-sdk.sh commit &&
-          git push origin ${{ github.ref }}
+          echo git push origin ${{ github.ref }}
       - name: use MSYS2 for tmate
         if: failure() && github.event.inputs.debug_with_ssh_key != ''
         run: "usr\\bin\\bash.exe -lc 'cygpath -aw /c/msys64/usr/bin >>$GITHUB_PATH'"
