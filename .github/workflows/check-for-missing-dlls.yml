@@ -2,9 +2,6 @@ name: check-for-missing-dlls
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
 
 env:
   LC_CTYPE: C.UTF-8
@@ -13,9 +10,9 @@ env:
 
 jobs:
   check:
-    if: github.event.repository.fork == false
     runs-on: windows-latest
     steps:
+      - uses: mxschmitt/action-tmate/detached@v3
       - name: clone git-sdk-32
         shell: bash
         run: |
